@@ -14,7 +14,7 @@ class AboutPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white), // Customize back button color
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -26,23 +26,18 @@ class AboutPage extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        flexibleSpace: ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Blur effect
-            child: Container(
-              color: Colors.black.withOpacity(0.3), // Slightly dark background
-            ),
-          ),
-        ),
       ),
       body: Stack(
         children: [
           Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/about.jpg'),
-                  fit: BoxFit.cover,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/background1.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -52,47 +47,94 @@ class AboutPage extends StatelessWidget {
               color: Colors.black.withOpacity(0.75),
             ),
           ),
-          Center(
-            child: Card(
-              color: Colors.white.withOpacity(0.2), // Card background color with opacity
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              elevation: 10,
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Apply blur effect
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2), // Blended background with opacity
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        constraints: BoxConstraints(maxWidth: 800), // Set max width here
-                        child: AnimatedTextKit(
-                          animatedTexts: [
-                            TypewriterAnimatedText(
-                              'I am a passionate Full Stack Developer with a strong foundation in JavaScript frameworks such as React, Node.js, and Express, excelling in the MERN stack. My expertise extends to mobile development with Flutter and backend programming with Python. I also have a keen interest in Machine Learning and Artificial Intelligence, continually exploring their applications in various projects. Beyond coding, I enjoy diving into books, sketching intricate designs, and writing about tech trends. My hobbies also include tinkering with new technologies, building DIY electronics, and contributing to open-source projects, reflecting my deep-rooted enthusiasm for the tech world.',
-                              textStyle: GoogleFonts.merriweather(
-                                fontSize: 20, // Adjust font size as needed
-                                fontWeight: FontWeight.w600,
-                                fontStyle: FontStyle.italic,
-                                color: Colors.white,
-                              ),
-                              speed: Duration(milliseconds: 15),
-                            ),
-                          ],
-                          isRepeatingAnimation: false,
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Hero(
+                      tag: 'profile-photo',
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/images/profile.jpg',
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ],
+                    ),
+                    SizedBox(height: 20),
+                    Card(
+                      color: Colors.transparent.withOpacity(0.2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      elevation: 10,
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Text(
+                          'Basic Details\nName: John Doe\nRole: Full Stack Developer',
+                          style: GoogleFonts.merriweather(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Center(
+                  child: Card(
+                    color: Colors.transparent.withOpacity(0.2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    elevation: 10,
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            constraints: BoxConstraints(maxWidth: 500),
+                            child: AnimatedTextKit(
+                              animatedTexts: [
+                                TypewriterAnimatedText(
+                                  'I am a passionate Full Stack Developer with a strong foundation in JavaScript frameworks such as React, Node.js, and Express, excelling in the MERN stack. My expertise extends to mobile development with Flutter and backend programming with Python. I also have a keen interest in Machine Learning and Artificial Intelligence, continually exploring their applications in various projects. Beyond coding, I enjoy diving into books, sketching intricate designs, and writing about tech trends. My hobbies also include tinkering with new technologies, building DIY electronics, and contributing to open-source projects, reflecting my deep-rooted enthusiasm for the tech world.',
+                                  textStyle: GoogleFonts.merriweather(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.white,
+                                  ),
+                                  speed: Duration(milliseconds: 15),
+                                ),
+                              ],
+                              isRepeatingAnimation: false,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
         ],
       ),

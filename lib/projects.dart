@@ -3,9 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui';
-import 'project_detail_page.dart';
 
-class ProjectCard extends StatelessWidget {
+class ProjectCard extends StatefulWidget {
   final String imageUrl;
   final String title;
   final String description;
@@ -22,88 +21,12 @@ class ProjectCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.transparent, // Set card background color
-      margin: const EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Blur effect
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Colors.white.withOpacity(0.2)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: GoogleFonts.oswald(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(description, style: TextStyle(color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Column(
-                        children: [
-                          IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.github, color: Colors.white),
-                            onPressed: () => _launchURL(githubUrl),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.web, color: Colors.white),
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProjectDetailPage(url: liveServerUrl),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: Image.asset(
-                      imageUrl,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () => _launchURL(liveServerUrl),
-                    child: const Text('Interact'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  _ProjectCardState createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends State<ProjectCard> {
+  bool _isHovered = false;
+  bool _isClicked = false;
 
   void _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
@@ -113,6 +36,134 @@ class ProjectCard extends StatelessWidget {
       throw 'Could not launch $url';
     }
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _isClicked = true;
+        });
+      },
+      child: MouseRegion(
+        onEnter: (_) {
+          setState(() {
+            _isHovered = true;
+          });
+        },
+        onExit: (_) {
+          Future.delayed(const Duration(seconds: 3), () {
+            if (!_isHovered) {
+              setState(() {
+                _isClicked = false;
+              });
+            }
+          });
+          setState(() {
+            _isHovered = false;
+          });
+        },
+        child: Card(
+          color: Colors.transparent,
+          margin: const EdgeInsets.all(10),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                ),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (!_isHovered && !_isClicked)
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  widget.title,
+                                  style: GoogleFonts.oswald(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if (_isHovered || _isClicked)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 30),
+                                Text(
+                                  widget.description,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const SizedBox(height: 10),
+                                Center(
+                                  child: Image.asset(
+                                    widget.imageUrl,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () => _launchURL(widget.liveServerUrl),
+                                  child: const Text('Interact'),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const FaIcon(FontAwesomeIcons.github, color: Colors.white),
+                            onPressed: () => _launchURL(widget.githubUrl),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.web, color: Colors.white),
+                            onPressed: () => _launchURL(widget.liveServerUrl),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (_isHovered || _isClicked)
+                      Positioned(
+                        top: 10,
+                        left: 10,
+                        child: Text(
+                          widget.title,
+                          style: GoogleFonts.oswald(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class ProjectsPage extends StatelessWidget {
@@ -121,7 +172,7 @@ class ProjectsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // Extend body behind the AppBar
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
           'Projects',
@@ -132,17 +183,17 @@ class ProjectsPage extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.transparent, // Make AppBar transparent
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white), // Customize back button color
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
-        ), // Remove AppBar shadow
+        ),
         flexibleSpace: ClipRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Blur effect
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Container(
-              color: Colors.black.withOpacity(0.1), // Slightly dark background
+              color: Colors.black.withOpacity(0.1),
             ),
           ),
         ),
@@ -152,31 +203,31 @@ class ProjectsPage extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/projects_bg.jpg'), // Background image
+                image: AssetImage('assets/images/background1.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           Positioned.fill(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Apply blur effect
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
-                color: Colors.black.withOpacity(0.5), // Dark overlay
+                color: Colors.black.withOpacity(0.5),
               ),
             ),
           ),
           GridView.count(
-            crossAxisCount: 4, // Number of cards in one row
+            crossAxisCount: 4,
             children: const [
               ProjectCard(
-                imageUrl: 'assets/images/Screenshot (8).png', // Use local image
+                imageUrl: 'assets/images/Screenshot (8).png',
                 title: 'Room-Booking-Application',
                 description: 'PG-Room Booking Application for students.',
                 githubUrl: 'https://github.com/shobhitkasturey/REACT-ROOM-BOOKING-APPLICATION',
                 liveServerUrl: 'https://pgroombooking.netlify.app/',
               ),
               ProjectCard(
-                imageUrl: 'assets/images/sc2.png', // Use local image
+                imageUrl: 'assets/images/sc2.png',
                 title: 'Portfolio',
                 description: 'A responsive Portfolio made using React JS and Tailwind CSS.',
                 githubUrl: 'https://github.com/shobhitkasturey/portfolio',
