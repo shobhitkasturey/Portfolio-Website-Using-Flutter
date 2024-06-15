@@ -116,11 +116,11 @@ class _ProjectCardState extends State<ProjectCard> {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                const SizedBox(height: 10),
-                                ElevatedButton(
-                                  onPressed: () => _launchURL(widget.liveServerUrl),
-                                  child: const Text('Interact'),
-                                ),
+                                // const SizedBox(height: 10),
+                                // ElevatedButton(
+                                //   onPressed: () => _launchURL(widget.liveServerUrl),
+                                //   child: const Text('Interact'),
+                                // ),
                               ],
                             ),
                         ],
