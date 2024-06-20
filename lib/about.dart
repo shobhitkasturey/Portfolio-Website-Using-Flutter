@@ -79,7 +79,7 @@ class AboutPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Text(
-                          'Basic Details\nName: John Doe\nRole: Full Stack Developer',
+                          'Shobhit Kasturey\nFull Stack Developer',
                           style: GoogleFonts.merriweather(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,

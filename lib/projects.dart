@@ -40,28 +40,16 @@ class _ProjectCardState extends State<ProjectCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isClicked = true;
-        });
-      },
+      onTap: () => setState(() => _isClicked = true),
       child: MouseRegion(
-        onEnter: (_) {
-          setState(() {
-            _isHovered = true;
-          });
-        },
+        onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) {
           Future.delayed(const Duration(seconds: 3), () {
             if (!_isHovered) {
-              setState(() {
-                _isClicked = false;
-              });
+              setState(() => _isClicked = false);
             }
           });
-          setState(() {
-            _isHovered = false;
-          });
+          setState(() => _isHovered = false);
         },
         child: Card(
           color: Colors.transparent,
@@ -116,11 +104,6 @@ class _ProjectCardState extends State<ProjectCard> {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                // const SizedBox(height: 10),
-                                // ElevatedButton(
-                                //   onPressed: () => _launchURL(widget.liveServerUrl),
-                                //   child: const Text('Interact'),
-                                // ),
                               ],
                             ),
                         ],
@@ -132,11 +115,19 @@ class _ProjectCardState extends State<ProjectCard> {
                       child: Row(
                         children: [
                           IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.github, color: Colors.white),
+                            icon: const FaIcon(
+                              FontAwesomeIcons.github,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                             onPressed: () => _launchURL(widget.githubUrl),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.web, color: Colors.white),
+                            icon: const Icon(
+                              Icons.web,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                             onPressed: () => _launchURL(widget.liveServerUrl),
                           ),
                         ],
