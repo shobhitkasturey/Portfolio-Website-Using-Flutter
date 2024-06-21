@@ -212,7 +212,7 @@ class ProjectsPage extends StatelessWidget {
             children: const [
               ProjectCard(
                 imageUrl: 'assets/images/Screenshot (8).png',
-                title: 'Room-Booking-Application',
+                title: 'Room Booking Application',
                 description: 'PG-Room Booking Application for students.',
                 githubUrl: 'https://github.com/shobhitkasturey/REACT-ROOM-BOOKING-APPLICATION',
                 liveServerUrl: 'https://pgroombooking.netlify.app/',
